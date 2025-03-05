@@ -1,0 +1,1046 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans, Arial, Helvetica, sans-serif);
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.gradient-bg {
+  background: linear-gradient(-45deg, #0a1930, #301934, #003b36, #0a1930);
+  background-size: 400% 400%;
+  animation: gradient-shift 10s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.content-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.chakra-title {
+  font-family: var(--font-major-mono, monospace);
+  color: #ffffff;
+  opacity: 0;
+  animation: fadeIn 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards, colorShift 8s infinite alternate ease-in-out;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.4);
+  font-size: 7rem !important; /* Explicit large size - approximately 112px */
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  margin-top: -2rem;
+  will-change: transform, opacity, color;
+}
+
+/* When the title is visible, we want the color shift animation to continue */
+/* We don't specify transition here since we want the fade-in animation to control initial appearance */
+
+/* Override animation when title is clicked */
+.title-moved {
+  animation: colorShift 8s infinite alternate ease-in-out, fadeOut 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
+  transform: scale(0.8) translateY(-20px);
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8) translateY(-20px);
+  }
+}
+
+.title-activated {
+  transform: translateY(-40vh);
+}
+
+.chakra-title::after {
+  content: none;
+}
+
+.title-moved::after {
+  opacity: 0 !important;
+  animation: none !important;
+  right: -60px !important;
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), right 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes colorShift {
+  0% {
+    color: #ffffff;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.4);
+  }
+  25% {
+    color: #9cb7ff;
+    text-shadow: 0 0 8px rgba(156, 183, 255, 0.6);
+  }
+  50% {
+    color: #d8a2ff;
+    text-shadow: 0 0 8px rgba(216, 162, 255, 0.6);
+  }
+  75% {
+    color: #72e1d1;
+    text-shadow: 0 0 8px rgba(114, 225, 209, 0.6);
+  }
+  100% {
+    color: #ffffff;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.4);
+  }
+}
+
+.content-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 48rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, visibility;
+  min-height: 300px;
+  height: auto;
+  max-height: 90vh;
+  text-align: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 2rem 0;
+}
+
+/* Projects section gets special treatment to be wider */
+.projects-section.content-section {
+  max-width: 80rem;
+  overflow-x: visible; /* Override hidden to allow horizontal scrolling */
+}
+
+/* About section gets special treatment for overflow */
+.about-section.content-section {
+  overflow-x: hidden;
+}
+
+/* About section animation sequence - top to bottom */
+.about-section .section-title {
+  animation: welcomeFadeIn 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards, colorShift 8s infinite alternate ease-in-out;
+}
+
+.about-section .welcome-subtitle {
+  animation: subtitleFadeIn 1s ease-out forwards 1.2s, colorShift 5s ease-in-out infinite alternate 3.5s;
+}
+
+.about-section .section-content {
+  animation: welcomeFadeIn 1s cubic-bezier(0.22, 1, 0.36, 1) forwards 2.1s;
+}
+
+.about-section .back-button {
+  animation: buttonFadeIn 1s ease-out forwards 3.0s, buttonBorderShift 8s infinite alternate ease-in-out 4s;
+}
+
+.content-section.visible {
+  opacity: 1;
+  visibility: visible;
+  z-index: 10;
+}
+
+.content-section.hidden {
+  opacity: 0;
+  visibility: hidden;
+  z-index: 0;
+  transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s 1.2s;
+}
+
+.welcome-title {
+  font-family: var(--font-major-mono, monospace);
+  font-size: 4rem !important;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+  opacity: 0;
+  animation: welcomeFadeIn 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards, colorShift 8s infinite alternate ease-in-out;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.4);
+  will-change: opacity, color;
+  margin-top: 0; /* Ensure no top margin pushes it down */
+  margin-bottom: 0; /* Remove bottom margin completely */
+  line-height: 1; /* Tighter line height */
+}
+
+@keyframes welcomeFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px); /* Changed from translateY(10px) to animate from above */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Original rain animation, no longer used directly */
+@keyframes rain {
+  0% {
+    transform: translate3d(-10vw, -150vh, 0);
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+    transform: translate3d(20vw, 100vh, 0);
+  }
+}
+
+/* Refined rainSlanted animation with smoother transitions */
+@keyframes rainSlanted {
+  0% {
+    opacity: 0;
+    transform: translate3d(-10vw, -200vh, 0) rotate(var(--slant-angle, -20deg));
+  }
+  10% {
+    opacity: 0; /* Still invisible as it starts moving */
+    transform: translate3d(-7vw, -150vh, 0) rotate(var(--slant-angle, -20deg));
+  }
+  20% {
+    opacity: var(--drop-opacity, 0.7); /* Fade in only after it's moving and closer to view */
+    transform: translate3d(-4vw, -100vh, 0) rotate(var(--slant-angle, -20deg));
+  }
+  85% {
+    opacity: var(--drop-opacity, 0.7);
+    transform: translate3d(15vw, 80vh, 0) rotate(var(--slant-angle, -20deg));
+  }
+  100% {
+    opacity: 0; /* Fade out as it leaves the screen */
+    transform: translate3d(20vw, 150vh, 0) rotate(var(--slant-angle, -20deg));
+  }
+}
+
+/* Frosted glass button */
+.glass-button {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); /* Safari support */
+  border: 2px solid rgba(255, 255, 255, 0.4); /* Start with visible border */
+  border-radius: 12px;
+  padding: 0.75rem 2rem;
+  font-family: var(--font-chakra-petch, sans-serif);
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              background 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
+  margin: 0.5rem;
+  min-width: 150px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.4);
+  /* Animations */
+  opacity: 0;
+  transform: translateY(20px);
+  will-change: opacity, transform, border-color, box-shadow;
+  animation: buttonFadeIn 1s cubic-bezier(0.22, 1, 0.36, 1) 1s forwards,
+             buttonBorderShift 8s infinite alternate ease-in-out;
+}
+
+.glass-button:nth-child(2) {
+  animation: buttonFadeIn 1s cubic-bezier(0.22, 1, 0.36, 1) 1.3s forwards,
+             buttonBorderShift 8s infinite alternate ease-in-out 0.5s;
+}
+
+.glass-button:hover {
+  transform: translateY(-3px) scale(1.05);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.6);
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.glass-button:active {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Create a subtle shine effect on hover */
+.glass-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 1;
+}
+
+.glass-button:hover::before {
+  left: 100%;
+}
+
+/* Button container */
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 0rem;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 600px;
+}
+
+/* Social buttons container */
+.social-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+/* Social button style */
+.social-button {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 3.5rem;
+  height: 3.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              background 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(20px);
+  will-change: opacity, transform;
+  animation: buttonFadeIn 1s cubic-bezier(0.22, 1, 0.36, 1) 1.6s forwards,
+             buttonBorderShift 8s infinite alternate ease-in-out 1s;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+.social-button:nth-child(2) {
+  animation: buttonFadeIn 1s cubic-bezier(0.22, 1, 0.36, 1) 1.9s forwards,
+             buttonBorderShift 8s infinite alternate ease-in-out 1.5s;
+}
+
+.social-button:hover {
+  transform: translateY(-3px) scale(1.1);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.social-button:active {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.social-button svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: white;
+  z-index: 2;
+  position: relative;
+}
+
+/* Button fade in animation */
+@keyframes buttonFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fix the buttonBorderShift animation to ensure it works correctly */
+@keyframes buttonBorderShift {
+  0% {
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+  }
+  25% {
+    border-color: rgba(156, 183, 255, 0.6);
+    box-shadow: 0 0 15px rgba(156, 183, 255, 0.3);
+  }
+  50% {
+    border-color: rgba(216, 162, 255, 0.6);
+    box-shadow: 0 0 15px rgba(216, 162, 255, 0.3);
+  }
+  75% {
+    border-color: rgba(114, 225, 209, 0.6);
+    box-shadow: 0 0 15px rgba(114, 225, 209, 0.3);
+  }
+  100% {
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Ensure content-section.visible children are visible right away */
+.content-section.visible .glass-button {
+  visibility: visible; /* Ensure buttons are visible when section is visible */
+}
+
+.content-section.hidden .glass-button {
+  visibility: hidden; /* Hide buttons when section is hidden */
+  animation: none; /* Disable animations when hidden */
+}
+
+/* Additional styles for social buttons */
+.social-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 1;
+  border-radius: 50%;
+}
+
+.social-button:hover::before {
+  left: 100%;
+}
+
+/* Fix for content-section visibility to include social buttons */
+.content-section.visible .social-button {
+  visibility: visible; /* Ensure buttons are visible when section is visible */
+}
+
+.content-section.hidden .social-button {
+  visibility: hidden; /* Hide buttons when section is hidden */
+  animation: none; /* Disable animations when hidden */
+}
+
+.welcome-subtitle {
+  font-family: var(--font-geist-sans), sans-serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: white;
+  opacity: 0;
+  animation: subtitleFadeIn 1s ease-out forwards 2.5s, colorShift 5s ease-in-out infinite alternate 3.5s;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+  margin-top: 1.5rem;
+  line-height: 1;
+}
+
+.separator {
+  margin: 0 0.75rem;
+  display: inline-block;
+  opacity: 0.8;
+  animation: separatorPulse 4s infinite alternate ease-in-out;
+}
+
+@keyframes subtitleFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 0.7; /* Changed from 1 to 0.7 (70% opacity) */
+    transform: translateY(0);
+  }
+}
+
+@keyframes separatorPulse {
+  0% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/* Ensure content-section.visible children are visible */
+.content-section.visible .welcome-subtitle {
+  visibility: visible;
+}
+
+.content-section.hidden .welcome-subtitle {
+  visibility: hidden;
+  animation: none;
+}
+
+/* Section title styling */
+.section-title {
+  font-family: var(--font-major-mono, monospace);
+  font-size: 4rem !important;
+  font-weight: 400;
+  text-transform: lowercase;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+  opacity: 0;
+  animation: welcomeFadeIn 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards, colorShift 8s infinite alternate ease-in-out;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.4);
+  will-change: opacity, color;
+  margin-top: -2rem;
+  margin-bottom: 1rem;
+  line-height: 1;
+}
+
+/* About section styling */
+.section-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  animation: welcomeFadeIn 1s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.8s;
+  max-width: 800px;
+  text-align: center;
+  margin-bottom: 2rem;
+  overflow-y: visible;
+  overflow-x: hidden;
+  padding: 0 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* For the about section, we need scroll capability */
+.about-section .section-content {
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 60vh;
+}
+
+.about-text {
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.8;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  max-width: 100%;
+  text-align: justify;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+}
+
+/* Custom scrollbar styling for content-section */
+.content-section::-webkit-scrollbar {
+  width: 8px;
+}
+
+.content-section::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.content-section::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+.content-section::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Add a custom scrollbar for the about section */
+.about-section .section-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.about-section .section-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.about-section .section-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+.about-section .section-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Project grid for projects section */
+.project-grid {
+  display: flex;
+  gap: 20px;
+  /* Keep vertical padding, ensure there's space on left and right for the first and last cards */
+  padding: 20px 0;
+  padding-left: 240;
+  margin: 0;
+  width: max-content;
+  overflow-x: visible; /* Ensure grid content can be scrolled */
+  
+  /* Add mask for fading edges effect */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 5%,
+    black 95%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 5%,
+    black 95%,
+    transparent 100%
+  );
+}
+
+/* Add spacers before and after the project grid to ensure full card visibility */
+.project-grid::before,
+.project-grid::after {
+  content: '';
+  display: block;
+  width: 20px; /* Increased width to create more space */
+  flex: 0 0 auto;
+}
+
+/* Give a bit more space to first and last cards */
+.project-card:first-child {
+  margin-left: 20px;
+}
+
+.project-card:last-child {
+  margin-right: 20px;
+}
+
+/* Ensure scrollbars only appear on the wrapper, not the grid itself */
+.projects-content-wrapper::-webkit-scrollbar {
+  height: 12px;
+}
+
+.projects-content-wrapper::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+}
+
+.projects-content-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+}
+
+.projects-content-wrapper::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Remove original scrollbar styles for project-grid */
+.project-grid::-webkit-scrollbar {
+  display: none;
+}
+
+/* Project card styling */
+.project-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); /* Safari support */
+  border-radius: 12px;
+  padding: 2rem;
+  min-height: 250px;
+  width: 330px;
+  min-width: 330px;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              background 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+  will-change: transform, border-color, box-shadow;
+  animation: buttonBorderShift 8s infinite alternate ease-in-out;
+}
+
+.project-card:nth-child(2) {
+  animation: buttonBorderShift 8s infinite alternate ease-in-out 0.5s;
+}
+
+.project-card:nth-child(3) {
+  animation: buttonBorderShift 8s infinite alternate ease-in-out 1s;
+}
+
+.project-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.6);
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.project-card h3 {
+  font-family: var(--font-chakra-petch, sans-serif);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: white;
+}
+
+.project-card p {
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+}
+
+/* Back button styling */
+.back-button {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  opacity: 0;
+  animation: buttonFadeIn 1s ease-out forwards 1.2s, buttonBorderShift 8s infinite alternate ease-in-out 2s;
+  position: relative;
+  z-index: 10;
+}
+
+/* Specific positioning for projects section back button */
+.projects-section .back-button {
+  margin-top: 1.5rem;
+  position: relative;
+  z-index: 10;
+  clear: both;
+}
+
+/* Section visibility for new sections */
+.content-section.visible .section-title,
+.content-section.visible .section-content,
+.content-section.visible > .back-button,
+.content-section.visible .project-grid {
+  visibility: visible;
+}
+
+/* Specific visibility for about section elements */
+.about-section.visible .section-title,
+.about-section.visible .welcome-subtitle,
+.about-section.visible .section-content,
+.about-section.visible .back-button {
+  visibility: visible;
+}
+
+.content-section.hidden .section-title,
+.content-section.hidden .section-content,
+.content-section.hidden > .back-button,
+.content-section.hidden .project-grid {
+  visibility: hidden;
+}
+
+/* Project tech tags */
+.project-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  justify-content: center;
+}
+
+.project-tech span {
+  font-family: var(--font-chakra-petch, sans-serif);
+  font-size: 0.85rem;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  color: white;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.project-tech span:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Project visit button */
+.project-visit-button {
+  font-family: var(--font-chakra-petch, sans-serif);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  padding: 0.5rem 1.5rem;
+  margin-top: 1.2rem;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  font-size: 0.95rem;
+  color: white;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              background 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  text-decoration: none;
+}
+
+.project-visit-button:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.project-visit-button:active {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Create a subtle shine effect on hover */
+.project-visit-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 1;
+}
+
+.project-visit-button:hover::before {
+  left: 100%;
+}
+
+/* Project award styling */
+.project-award {
+  font-family: var(--font-chakra-petch, sans-serif);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #9cb7ff;
+  margin-bottom: 1rem;
+  padding: 0.35rem 1rem;
+  background: rgba(156, 183, 255, 0.15);
+  display: inline-block;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 8px rgba(156, 183, 255, 0.4);
+  animation: glowPulse 3s infinite alternate ease-in-out;
+}
+
+/* Lead developer role styling */
+.project-role {
+  font-family: var(--font-chakra-petch, sans-serif);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #72e1d1;
+  margin-bottom: 1rem;
+  padding: 0.35rem 1rem;
+  background: rgba(114, 225, 209, 0.15);
+  display: inline-block;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 8px rgba(114, 225, 209, 0.4);
+  animation: rolePulse 3s infinite alternate ease-in-out;
+}
+
+@keyframes glowPulse {
+  0% {
+    box-shadow: 0 0 5px rgba(156, 183, 255, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 12px rgba(156, 183, 255, 0.6);
+  }
+}
+
+@keyframes rolePulse {
+  0% {
+    box-shadow: 0 0 5px rgba(114, 225, 209, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 12px rgba(114, 225, 209, 0.6);
+  }
+}
+
+/* For project section, allow horizontal scrolling to work properly */
+.projects-section .section-content {
+  max-width: 98vw;
+  padding: 0;
+  margin-bottom: 0;
+  padding-left: 240px;
+  padding-right: 40px;
+  overflow-x: visible; /* Allow horizontal content to be visible */
+}
+
+/* Projects back button - fixed position */
+.projects-back-button {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  margin: 0;
+}
+
+.projects-back-button.visible {
+  opacity: 0;
+  animation: buttonFadeIn 1s ease-out forwards 1.2s, buttonBorderShift 8s infinite alternate ease-in-out 2s;
+}
+
+.projects-back-button.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Projects content wrapper */
+.projects-content-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+  padding: 0;
+  padding-bottom: 15px;
+  position: relative;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+/* Ensure scrollbars only appear on the wrapper, not the grid itself */
+.projects-content-wrapper::-webkit-scrollbar {
+  height: 12px;
+  display: block; /* Force scrollbar to display */
+}
+
+.projects-content-wrapper::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+}
+
+.projects-content-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+}
+
+.projects-content-wrapper::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.projects-section .back-button {
+  position: relative;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+  z-index: 10;
+  clear: both;
+}
+
+/* Ensure the about section specific animations are disabled when hidden */
+.about-section.hidden .section-title,
+.about-section.hidden .welcome-subtitle,
+.about-section.hidden .section-content,
+.about-section.hidden .back-button {
+  visibility: hidden;
+  animation: none;
+}
+
+.entry-subtitle {
+  font-family: var(--font-geist-sans), sans-serif;
+  font-size: 1.2rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: white;
+  opacity: 0;
+  animation: entrySubtitleFadeIn 1.5s ease-out forwards 2s, colorShift 5s ease-in-out infinite alternate 3.5s;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+  margin-top: -1rem;
+  line-height: 1;
+}
+
+@keyframes entrySubtitleFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  100% {
+    opacity: 0.5;
+    transform: translateY(0);
+  }
+}
+
+.title-moved + .entry-subtitle {
+  opacity: 0 !important;
+  animation: none !important;
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
